@@ -80,10 +80,7 @@ export default {
   methods: {
     gotoPicDetail(data) {
       this.$router.push({
-        path: "/imageDetail",
-        query: {
-          pid: data,
-        },
+        path: "/imageDetail/" + data,
       });
     },
     getImage(pid) {

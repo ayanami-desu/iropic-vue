@@ -95,7 +95,7 @@ export default {
     return {
       albumId: this.$route.params.albumId,
       tags: this.$route.params.tags,
-      pageSize: 4,
+      pageSize: 16,
       sortBy: true,//true代表降序，down代表升序
       pageLoading: true,
       imageList: [],
@@ -114,16 +114,6 @@ export default {
       this.loadImages(1);
     },
     selectedTags(newVal) {
-      // let index = this.$route.path.lastIndexOf("/");
-      // let path = this.$route.path.substr(0, index + 1) + newVal.join("+");
-      // if (!this.$route.path.includes("/tag/")) {
-      //   path = this.$route.path + "/tag/" + newVal.join("+");
-      // }
-      // else if (newVal.length === 0){
-      //   path = this.albumId? '/album/' + this.albumId: ''
-      //   console.log(path)
-      // }
-      // console.log(path)
       let path = this.albumId? '/album/' + this.albumId + '/': '/'
       if (newVal.length !== 0) {
         path = path + "tag/" + newVal.join("+");
@@ -131,7 +121,7 @@ export default {
       this.$router.push(path);
     },
   },
-  mounted: function () {
+  created: function () {
     this.loadImages(1);
   },
   methods: {
@@ -178,9 +168,15 @@ export default {
         return;
       }
       let temp = res.data;
+      let pidList = []
       for (let i = 0; i < res.data.length; i++) {
+        pidList.push(res.data[i]['id'])
         temp[i]["selected"] = false;
       }
+      this.$store.commit({
+        type: 'increment',
+        pidList: pidList
+      })
       this.imageList = temp;
       this.totalPicNum = res.imageNum;
       if(this.albumId) this.albumName = temp[0]['belong_to_album']

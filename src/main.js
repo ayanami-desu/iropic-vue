@@ -5,6 +5,7 @@ import './plugins/element.js'
 import Env from './components/env'
 import axios from "axios";
 import VueAxios from 'vue-axios'
+import store from './stores'
 
 
 Vue.use(VueAxios, axios)
@@ -13,5 +14,6 @@ Vue.prototype.MyEnv = Env
 
 new Vue({
   router,
+  store: store,
   render: h => h(App)
 }).$mount('#app')

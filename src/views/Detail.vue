@@ -18,11 +18,23 @@
       </div>
     </div>
     <div class="img-con">
+      <div
+        class="arrow-con"
+        @click="prevOrNext('prev')"
+      >
+        <i class="el-icon-caret-left" />
+      </div>
       <el-image
         :src="image_url + pid"
         fit="scale-down"
         class="the-image"
       />
+      <div class="arrow-con">
+        <i
+          class="el-icon-caret-right"
+          @click="prevOrNext('next')"
+        />
+      </div>
     </div>
     <div>
       <el-button @click="seeOriginImg">
@@ -32,6 +44,7 @@
         设为相册封面
       </el-button>
     </div>
+    <el-divider />
     <div class="tag-con">
       <el-tag
         v-for="tag in imageInfo.labels"
@@ -39,6 +52,7 @@
         effect="dark"
         closable
         @close="handleTagClose(tag)"
+        class="tag-item"
       >
         {{ tag }}
       </el-tag>
@@ -69,25 +83,33 @@
           }}</span>
         </el-option>
       </el-select>
-      <div>
+      <div style="margin: 1em 0">
         <el-button @click="putImgLabel">
           增加
         </el-button>
       </div>
     </div>
+    <el-divider />
+    <keep-alive>
+      <LabelCloud @addLabel="handleAddLabel" />
+    </keep-alive>
   </div>
 </template>
 <script>
 import { setAlbumCoverReq } from "@/api/album.js";
 import { searchLabelReq } from "@/api/label.js";
 import { getImgInfoReq, putImgLabelReq, delImgLabelReq } from "@/api/image.js";
+import LabelCloud from "../components/LabelCloud.vue";
 
 export default {
   name: "ImageDetail",
+  components: {
+    LabelCloud,
+  },
   data() {
     return {
       image_url: this.MyEnv.image_url,
-      pid: this.$route.query.pid,
+      pid: this.$route.params.pid,
       imageInfo: {
         belong_to_album: "",
         edit_time: "",
@@ -101,6 +123,16 @@ export default {
       selectedLables: [],
       searchLoading: false,
     };
+  },
+  watch: {
+    // 监听参数变化，重新获取数据
+    $route(to) {
+      this.pid = to.params.pid;
+      this.getImgInfo(this.pid);
+    },
+  },
+  created: function () {
+    this.getImgInfo(this.pid);
   },
   methods: {
     stamp2Date(stamp) {
@@ -116,11 +148,18 @@ export default {
       let url = this.image_url + this.pid + "&fileType=origin";
       window.open(url, "_blank");
     },
-    async getImgInfo(params) {
-      let res = await getImgInfoReq(params);
-      this.imageInfo = res.data;
-      this.imageSize = res.size / (1024 * 1024);
-      this.pageLoading = false;
+    getImgInfo(pid) {
+      getImgInfoReq({
+        pid: pid,
+      })
+        .then((res) => {
+          this.imageInfo = res.data;
+          this.imageSize = res.size / (1024 * 1024);
+          this.pageLoading = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     async setAlbumCover(pid) {
       let res = await setAlbumCoverReq(pid);
@@ -142,16 +181,17 @@ export default {
     },
     putImgLabel() {
       if (this.selectedLables.length == 0) return;
-      let that = this;
       let labelString = this.selectedLables.join(",");
       putImgLabelReq({
         labels: labelString,
         pid: this.pid,
       }).then((res) => {
-        console.log(res);
-        that.getImgInfo({
-          pid: that.pid,
+        this.$message({
+          type: "success",
+          message: res.msg,
         });
+        this.getImgInfo(this.pid);
+        this.selectedLables = [];
       });
     },
     handleTagClose(tag) {
@@ -166,9 +206,7 @@ export default {
             pid: this.pid,
             label: tag,
           }).then(() => {
-            this.getImgInfo({
-              pid: this.pid,
-            });
+            this.getImgInfo(this.pid);
           });
           this.$message({
             type: "success",
@@ -182,11 +220,41 @@ export default {
           });
         });
     },
-  },
-  created: function () {
-    this.getImgInfo({
-      pid: this.pid,
-    });
+    handleAddLabel(label) {
+      if (this.selectedLables.indexOf(label) >= 0) {
+        this.$message({
+          type: "error",
+          message: "标签重复啦",
+        });
+        return;
+      }
+      if (this.selectedLables.length >= 5) {
+        this.$message({
+          type: "error",
+          message: "标签太多啦",
+        });
+        return;
+      }
+      this.selectedLables.push(label);
+    },
+    prevOrNext(direction) {
+      let pidList = this.$store.state.pidList;
+      let index = pidList.indexOf(parseInt(this.pid));
+      if (direction === "prev") {
+        if (index === 0) {
+          this.$message('已经是第一张了')
+          return;
+        }
+        this.pid = this.$store.state.pidList[index - 1];
+      } else if (direction === "next") {
+        if (index === pidList.length - 1) {
+          this.$message('已经是最后一张了')
+          return;
+        }
+        this.pid = this.$store.state.pidList[index + 1];
+      }
+      this.$router.push("/imageDetail/" + this.pid);
+    },
   },
 };
 </script>
@@ -199,7 +267,11 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  /* height: 100vh; */
+}
+.arrow-con {
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 600px) {
@@ -231,14 +303,18 @@ export default {
 }
 .img-con {
   margin-bottom: 1em;
+  display: flex;
+  align-items: center;
 }
 .tag-con {
   display: flex;
   width: 50vw;
 }
+.tag-item {
+  margin: auto 8px;
+}
 .label-input {
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
   align-items: center;
 }

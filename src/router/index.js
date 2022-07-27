@@ -33,7 +33,7 @@ const routes = [
     component: () => import('../views/Upload.vue')
   },
   {
-    path: '/imageDetail',
+    path: '/imageDetail/:pid',
     name: 'imageDetail',
     component: () => import('../views/Detail.vue')
   },

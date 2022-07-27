@@ -54,7 +54,6 @@
 
 <script>
 import { getTokenReq, checkLoginReq, refreshTokenReq } from "@/api/api.js";
-//import Cookies from 'js-cookie'
 
 export default {
   name: "Login",
@@ -81,32 +80,6 @@ export default {
     this.checkLogin();
   },
   methods: {
-    // checkLogin() {
-    //   let accessToken = Cookies.get('accessToken')
-    //   if ( !accessToken ) {
-    //     this.$message('请登录！')
-    //     return
-    //   }
-    //   checkLoginReq()
-    //     .then((res) => {
-    //       if (res.code === 1) {
-    //         this.hasLogin = true;
-    //       }
-    //     })
-    //     .catch(() => {
-    //       let refreshToken = Cookies.get("refreshToken");
-    //       refreshTokenReq({
-    //         refresh: refreshToken || "123",
-    //       }).then((res) => {
-    //           Cookies.set("accessToken", res.access);
-    //           Cookies.set("refreshToken", res.refresh);
-    //       }).catch((err) => {
-    //         console.log(err)
-    //         this.$message('请登录！')
-    //       })
-
-    //     });
-    // },
     checkLogin() {
       let accessToken = localStorage.getItem('accessToken')
       if ( !accessToken ) {
@@ -117,6 +90,10 @@ export default {
         .then((res) => {
           if (res.code === 1) {
             this.hasLogin = true;
+            this.$message({
+                type: 'success',
+                message: '已经登录了'
+              })
           }
         })
         .catch(() => {
@@ -126,6 +103,10 @@ export default {
           }).then((res) => {
               localStorage.setItem("accessToken", res.access);
               localStorage.setItem("refreshToken", res.refresh);
+              this.$message({
+                type: 'success',
+                message: 'token刷新成功'
+              })
           }).catch((err) => {
             console.log(err)
             this.$message('请登录！')

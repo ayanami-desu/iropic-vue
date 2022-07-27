@@ -96,12 +96,12 @@ export default {
           bgColor: "#1ec0d9",
           desc: "下载",
         },
-        {
-          icon: "el-icon-s-flag",
-          action: "setLabel",
-          bgColor: "#8c2817",
-          desc: "设置标签",
-        },
+        // {
+        //   icon: "el-icon-s-flag",
+        //   action: "setLabel",
+        //   bgColor: "#8c2817",
+        //   desc: "设置标签",
+        // },
       ],
       expandTool: false,
     };
