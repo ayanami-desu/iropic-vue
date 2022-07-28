@@ -240,6 +240,7 @@ export default {
     prevOrNext(direction) {
       let pidList = this.$store.state.pidList;
       let index = pidList.indexOf(parseInt(this.pid));
+      if (index<0) return;
       if (direction === "prev") {
         if (index === 0) {
           this.$message('已经是第一张了')

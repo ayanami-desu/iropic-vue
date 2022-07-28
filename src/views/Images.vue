@@ -28,7 +28,10 @@
         </el-tag>
       </div>
       <div class="top-tools-con">
-        <div class="top-tool-item">
+        <div
+          class="top-tool-item"
+          @click="gotoRandomImg"
+        >
           <i class="el-icon-view" />
           <span>随机一张</span>
         </div>
@@ -71,7 +74,7 @@
   </div>
 </template>
 <script>
-import { getImgListReq } from "@/api/image.js";
+import { getImgListReq, getRandomImgReq } from "@/api/image.js";
 import HoverTool from "../components/HoverTool.vue";
 import ImageItem from "../components/ImageItem.vue";
 import "viewerjs/dist/viewer.css";
@@ -125,6 +128,15 @@ export default {
     this.loadImages(1);
   },
   methods: {
+    gotoRandomImg(){
+      getRandomImgReq({
+        field: 'pid'
+      }).then((res) => {
+        this.$router.push('/imageDetail/' + res.pid)
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
     selectImg(index) {
       this.imageList[index]['selected'] = true
       this.selectedImgList.push(this.imageList[index]['id']);

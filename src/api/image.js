@@ -10,6 +10,15 @@ export const getImgListReq = (data) => {
     })
 }
 
+export const getRandomImgReq = (data) => {
+    // 获取随机图片
+    return axios({
+        url: 'image/random',
+        method: 'get',
+        data
+    })
+}
+
 export const deleteImgReq = (data) => {
     // 删除图片
     return axios({
