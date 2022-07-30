@@ -28,6 +28,15 @@ export const deleteImgReq = (data) => {
     })
 }
 
+export const setImgGroupReq = (data) => {
+    // 将图片差分设为一组
+    return axios({
+        url: 'image/image',
+        method: 'put',
+        data
+    })
+}
+
 export const getImgInfoReq = (data) => {
     // 获取图片详细信息
     return axios({

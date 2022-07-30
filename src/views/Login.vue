@@ -107,9 +107,10 @@ export default {
                 type: 'success',
                 message: 'token刷新成功'
               })
+              this.hasLogin = true;
           }).catch((err) => {
             console.log(err)
-            this.$message('请登录！')
+            this.$message('token过期，请登录！')
           })
 
         });

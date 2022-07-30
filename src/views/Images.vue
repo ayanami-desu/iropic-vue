@@ -191,7 +191,7 @@ export default {
       })
       this.imageList = temp;
       this.totalPicNum = res.imageNum;
-      if(this.albumId) this.albumName = temp[0]['belong_to_album']
+      if(this.albumId) this.albumName = temp[0]['belong_album']
       this.pageLoading = false
       if (nowPage === 1) {
         this.$notify.success({

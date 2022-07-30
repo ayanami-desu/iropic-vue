@@ -5,10 +5,6 @@
   >
     <div class="title-con">
       <div>
-        <span>画师：</span>
-        <span>{{ imageInfo.author }}</span>
-      </div>
-      <div>
         <span>下载于：</span>
         <time>{{ stamp2Date(imageInfo.edit_time) }}</time>
       </div>
@@ -35,6 +31,17 @@
           @click="prevOrNext('next')"
         />
       </div>
+    </div>
+    <div
+      class="img-con"
+      v-for="subPid in imageInfo.images_set"
+      :key="subPid"
+    >
+      <el-image
+        :src="image_url + subPid"
+        fit="scale-down"
+        class="the-image"
+      />
     </div>
     <div>
       <el-button @click="seeOriginImg">
@@ -111,14 +118,12 @@ export default {
       image_url: this.MyEnv.image_url,
       pid: this.$route.params.pid,
       imageInfo: {
-        belong_to_album: "",
+        belong_album: "",
         edit_time: "",
         labels: [],
-        origin_filename: "",
-        author: "",
       },
       pageLoading: true,
-      imageSize: 0,
+      imageSize: 1.004,
       remoteLabelList: [],
       selectedLables: [],
       searchLoading: false,
@@ -144,6 +149,9 @@ export default {
       let m = date.getMinutes();
       return Y + M + D + h + m;
     },
+    getImage(fid) {
+      return this.MyEnv.image_url + fid;
+    },
     seeOriginImg() {
       let url = this.image_url + this.pid + "&fileType=origin";
       window.open(url, "_blank");
@@ -154,7 +162,7 @@ export default {
       })
         .then((res) => {
           this.imageInfo = res.data;
-          this.imageSize = res.size / (1024 * 1024);
+          //this.imageSize = res.size / (1024 * 1024);
           this.pageLoading = false;
         })
         .catch((err) => {

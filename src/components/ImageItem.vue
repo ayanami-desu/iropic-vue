@@ -1,5 +1,9 @@
 <template>
   <div class="cell-item">
+    <ImageNumBadge
+      :num="imageData.sub_img_num"
+      v-if="imageData.sub_img_num !=0"
+    />
     <el-image
       lazy
       class="cell-img"
@@ -30,9 +34,9 @@
         <i class="el-icon-folder-opened" />
         <span
           style="margin-left: 3px"
-          v-if="imageData.belong_to_album"
+          v-if="imageData.belong_album"
         >{{
-          imageData.belong_to_album
+          imageData.belong_album
         }}</span>
         <span
           style="margin-left: 3px"
@@ -58,12 +62,16 @@
 </template>
 
 <script>
+import ImageNumBadge from "./ImageNumBadge.vue";
 export default {
   name: "ImageItem",
   data() {
     return {
       isSelected: false,
     };
+  },
+  components: {
+    ImageNumBadge,
   },
   props: {
     imageData: {
@@ -72,10 +80,10 @@ export default {
         return {};
       },
     },
-    index:{
-        type: Number,
-        default: -1
-    }
+    index: {
+      type: Number,
+      default: -1,
+    },
   },
   methods: {
     gotoPicDetail(data) {
@@ -92,7 +100,8 @@ export default {
       let M = date.getMonth() + 1 + "-";
       let D = date.getDate() + " ";
       let h = date.getHours() + ":";
-      let m = date.getMinutes()<10? '0' + date.getMinutes():date.getMinutes();
+      let m =
+        date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
       return Y + M + D + h + m;
     },
     selectImg(index) {
@@ -103,7 +112,7 @@ export default {
       }
     },
     addSelectedTag(tag) {
-      this.$emit('addTag', tag)
+      this.$emit("addTag", tag);
     },
   },
 };

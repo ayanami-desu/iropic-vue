@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { setImgR18Req, cancelImgR18Req, deleteImgReq } from "@/api/image.js";
+import { setImgR18Req, cancelImgR18Req, deleteImgReq, setImgGroupReq } from "@/api/image.js";
 import { moveImgToAlbumReq } from "@/api/album.js";
 import SelectAlbumDialog from "./SelectAlbumDialog.vue";
 
@@ -96,12 +96,12 @@ export default {
           bgColor: "#1ec0d9",
           desc: "下载",
         },
-        // {
-        //   icon: "el-icon-s-flag",
-        //   action: "setLabel",
-        //   bgColor: "#8c2817",
-        //   desc: "设置标签",
-        // },
+        {
+          icon: "el-icon-s-unfold",
+          action: "setGroup",
+          bgColor: "#8c2817",
+          desc: "设置为一组",
+        },
       ],
       expandTool: false,
     };
@@ -127,8 +127,8 @@ export default {
         case "downloadImg":
           this.downloadImg();
           break;
-        case "setLabel":
-          this.setLabel();
+        case "setGroup":
+          this.setGroup();
           break;
       }
     },
@@ -195,8 +195,19 @@ export default {
         message: '暂不支持'
       })
     },
-    setLabel(){
-      this.$message('敬请期待')
+    setGroup(){
+      if (this.selectedImgList.length<2){
+        this.$message.error('数量不足')
+        return
+      }
+      setImgGroupReq({
+        pidList: this.selectedImgList
+      }).then((res) => {
+        this.$message(res.msg)
+        this.cancelSelect();
+      }).catch((err) => {
+        console.log(err)
+      })
     },
   },
   computed: {
