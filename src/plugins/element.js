@@ -1,8 +1,8 @@
 import Vue from 'vue'
 //import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 
-//Vue.use(Element)
 import {
   Pagination,
   Dialog,
@@ -51,3 +51,4 @@ Vue.prototype.$loading = Loading.service;
 Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
+Vue.component(CollapseTransition.name, CollapseTransition)
