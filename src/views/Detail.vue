@@ -320,7 +320,10 @@ export default {
 }
 .tag-con {
   display: flex;
-  width: 50vw;
+  /* width: 50vw; */
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 .tag-item {
   margin: auto 8px;

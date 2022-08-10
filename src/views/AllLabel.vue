@@ -103,14 +103,14 @@ export default {
   align-items: center;
 }
 .labels-con {
-  max-width: 80%;
+  /* max-width: 80%; */
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 }
 .label-item {
-  padding: 0 1em;
+  padding: 0 0.5em;
   margin: 0.5em 0;
   box-sizing: border-box;
   cursor: pointer;
