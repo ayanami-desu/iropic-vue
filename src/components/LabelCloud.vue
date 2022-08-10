@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="all-con">
     <div class="all-tags-con">
       <div
         v-for="label in labelList"
@@ -63,9 +63,15 @@ export default {
 </script>
 
 <style scoped>
+.all-con{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+}
 .all-tags-con {
   max-width: 80%;
-  margin: 1em auto;
+  margin: 1em 0;
   padding: 1em 0;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
   display: flex;
@@ -83,5 +89,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 80%;
 }
 </style>

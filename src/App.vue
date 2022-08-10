@@ -1,31 +1,56 @@
 <template>
   <div id="app">
-    <MyNav />
-    <div class="views">
-      <router-view />
+    <TopNav />
+    <div class="main-con">
+      <SideNav />
+      <div
+        class="views"
+        :style="fold?'width:100%':'width:calc(100% - 68px)'"
+      >
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import MyNav from './components/MyNav.vue'
+import TopNav from './components/TopNav.vue'
+import SideNav from './components/SideNav.vue'
 export default {
   name: 'App',
   components: {
-    MyNav,
+    TopNav,
+    SideNav,
+  },
+  data(){
+    return{
+
+    }
+  },
+  computed:{
+    fold(){
+      return this.$store.state.sideNavState
+    }
   }
+
 }
 </script>
 
-<style>
+<style scoped>
 #app {
   min-height: 100vh;
 }
+.main-con{
+  padding-top: 60px;
+  display: flex;
+  justify-content: flex-end;
+}
 .views {
-  padding: 80px 0;
-  /* width: 100vw; */
   display: flex;
   align-items: center;
   flex-direction: column;
+  background: #eeeeee;
+  min-height: 100vh;
 }
+
 </style>

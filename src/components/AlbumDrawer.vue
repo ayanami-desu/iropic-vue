@@ -111,7 +111,7 @@
 import {
   getAlbumListReq,
   newAlbumReq,
-  deleteAlbumReq,
+  delAlbumReq,
   editAlbumReq,
 } from "@/api/album.js";
 export default {
@@ -194,7 +194,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          deleteAlbumReq({
+          delAlbumReq({
             albumId: albumId,
           }).then((res) => {
             this.$message({

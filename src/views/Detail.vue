@@ -4,33 +4,35 @@
     class="page-con"
   >
     <div class="title-con">
-      <div>
-        <span>下载于：</span>
-        <time>{{ stamp2Date(imageInfo.edit_time) }}</time>
-      </div>
-      <div>
-        <span>大小：</span>
-        <span>{{ imageSize.toFixed(2) }} MB</span>
-      </div>
-    </div>
-    <div class="img-con">
       <div
         class="arrow-con"
         @click="prevOrNext('prev')"
       >
         <i class="el-icon-caret-left" />
       </div>
-      <el-image
-        :src="image_url + pid"
-        fit="scale-down"
-        class="the-image"
-      />
+      <div class="title-desc">
+        <div>
+          <span>下载于：</span>
+          <time>{{ stamp2Date(imageInfo.edit_time) }}</time>
+        </div>
+        <div>
+          <span>大小：</span>
+          <span>{{ imageSize.toFixed(2) }} MB</span>
+        </div>
+      </div>
       <div class="arrow-con">
         <i
           class="el-icon-caret-right"
           @click="prevOrNext('next')"
         />
       </div>
+    </div>
+    <div class="img-con">
+      <el-image
+        :src="image_url + pid"
+        fit="scale-down"
+        class="the-image"
+      />
     </div>
     <div
       class="img-con"
@@ -146,7 +148,8 @@ export default {
       let M = date.getMonth() + 1 + "-";
       let D = date.getDate() + " ";
       let h = date.getHours() + ":";
-      let m = date.getMinutes();
+      let m =
+        date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
       return Y + M + D + h + m;
     },
     getImage(fid) {
@@ -270,6 +273,7 @@ export default {
 <style scoped>
 .title-con {
   display: flex;
+  align-items: center;
 }
 .page-con {
   display: flex;
@@ -286,8 +290,8 @@ export default {
 @media screen and (max-width: 600px) {
   /* 移动端 */
   .title-con {
-    flex-wrap: nowrap;
-    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
   }
   .the-image {
     width: 100%;
@@ -301,7 +305,6 @@ export default {
   .title-con {
     width: 50vw;
     justify-content: space-evenly;
-    flex-wrap: wrap;
   }
   .the-image {
     height: 100%;

@@ -27,9 +27,6 @@ const routes = [
   {
     path: '/upload',
     name: 'Upload',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import('../views/Upload.vue')
   },
   {
@@ -47,11 +44,20 @@ const routes = [
     name: 'login',
     component: () => import('../views/Login.vue')
   },
+  {
+    path: '/all-tag',
+    name: 'allTag',
+    component: () => import('../views/AllLabel.vue')
+  },
 ]
 
 const router = new VueRouter({
   mode: 'history',
-  routes
+  routes,
+  scrollBehavior() {
+    // 始终滚动到顶部
+    return { top: 0 }
+  },
 })
 
 export default router

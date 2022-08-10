@@ -151,7 +151,6 @@ export default {
   opacity: 1;
 }
 .cell-item {
-  background: #fff;
   height: 300px;
   box-sizing: border-box;
   position: relative;

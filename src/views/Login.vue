@@ -47,6 +47,12 @@
         >
           登录
         </el-button>
+        <el-button
+          type="primary"
+          @click.native.prevent="logout"
+        >
+          清除token
+        </el-button>
       </div>
     </div>
   </div>

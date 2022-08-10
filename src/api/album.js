@@ -39,7 +39,7 @@ export const newAlbumReq = (data) => {
     })
 }
 
-export const deleteAlbumReq = (data) => {
+export const delAlbumReq = (data) => {
     // 删除相册
     return axios({
         url: 'album/album',

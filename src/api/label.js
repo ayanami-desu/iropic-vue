@@ -28,3 +28,12 @@ export const newLabelReq = (data) => {
         data
     })
 }
+
+export const delLabelReq = (data) => {
+    // 删除标签
+    return axios({
+        url: 'label/label',
+        method: 'delete',
+        data
+    })
+}

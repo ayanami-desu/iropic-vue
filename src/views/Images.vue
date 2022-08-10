@@ -69,6 +69,7 @@
       layout="prev, pager, next"
       :total="totalPicNum"
       :page-size="pageSize"
+      :current-page="nowPage"
       @current-change="handlePageChange"
     />
   </div>
@@ -104,8 +105,9 @@ export default {
       imageList: [],
       albumName: '',
       totalPicNum: 0,
-      selectedTags: [],
+      selectedTags: this.$route.params.tags?this.$route.params.tags.split('+'):[],
       selectedImgList: [],
+      nowPage: this.$route.query.page?this.$route.query.page:1,
     };
   },
   computed: {},
@@ -114,18 +116,14 @@ export default {
     $route(to) {
       this.albumId = to.params.albumId;
       this.tags = to.params.tags;
-      this.loadImages(1);
-    },
-    selectedTags(newVal) {
-      let path = this.albumId? '/album/' + this.albumId + '/': '/'
-      if (newVal.length !== 0) {
-        path = path + "tag/" + newVal.join("+");
-      }
-      this.$router.push(path);
+      this.selectedTags = to.params.tags?to.params.tags.split('+'):[];
+      let page = to.query.page?to.query.page:1;
+      this.nowPage = page;
+      this.loadImages(page);
     },
   },
   created: function () {
-    this.loadImages(1);
+    this.loadImages(this.nowPage);
   },
   methods: {
     gotoRandomImg(){
@@ -142,11 +140,13 @@ export default {
       this.selectedImgList.push(this.imageList[index]['id']);
     },
     cancelSelectImg(index) {
+      //取消单张图片的选择
       this.imageList[index]['selected'] = false
       let pid = this.imageList[index]['id']
       this.selectedImgList.splice(this.selectedImgList.indexOf(pid), 1);
     },
     cancelSelect(){
+      //取消全部选择
       for (let i=0;i<this.imageList.length;i++){
         if(this.imageList[i]['selected']) {
           this.imageList[i]['selected'] = false
@@ -160,7 +160,12 @@ export default {
     },
     handlePageChange(nowPage){
       this.cancelSelect();
-      this.loadImages(nowPage)
+      this.$router.push({
+        path: this.$route.path,
+        query: {
+          page: nowPage
+        }
+      })
     },
     async loadImages(nowPage) {
       let data = {
@@ -210,10 +215,27 @@ export default {
         return;
       }
       this.selectedTags.push(tag);
+      this.queryByTags()
     },
     cancelSelectedTag(tag) {
       this.selectedTags.splice(this.selectedTags.indexOf(tag), 1);
+      this.queryByTags()
     },
+    queryByTags(){
+      let path = this.albumId? '/album/' + this.albumId + '/': '/'
+      if (this.selectedTags.length !== 0) {
+        path = path + "tag/" + this.selectedTags.join("+");
+      }else{
+        this.$router.push('/')
+        return
+      }
+      this.$router.push({
+        path: path,
+        query:{
+          page: 1
+        }
+      });
+    }
   },
 };
 </script>
