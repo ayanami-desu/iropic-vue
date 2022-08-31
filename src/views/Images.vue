@@ -301,17 +301,21 @@ export default {
 .main-con {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
   width: 100%;
+  min-height: 100px;
   overflow-y: auto;
 }
 @media screen and (max-width: 600px) {
   /* 移动端 */
   .main-con {
-    display: flex;
     flex-direction: column;
-    overflow-y: auto;
     align-items: center;
+  }
+}
+@media screen and (min-width: 601px) {
+  /* 桌面端 */
+  .main-con {
+    justify-content: flex-start;
   }
 }
 </style>

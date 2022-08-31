@@ -35,6 +35,7 @@
       :before-upload="beforeUploadHandler"
       :auto-upload="false"
       :headers="uploadHeaders"
+      :on-error="onErrorHandler"
     >
       <i class="el-icon-upload" />
       <div>点击上方文字上传全部已选择文件</div>
@@ -43,7 +44,7 @@
           <span>登录后才能上传，一次最多5张</span>
         </div>
       </template>
-    </el-upload>    
+    </el-upload>
     <div>
       <el-button
         type="text"
@@ -62,8 +63,7 @@
 </template>
 
 <script>
-import { getAlbumListReq } from "@/api/album.js"
-//import { uploadImgReq } from "@/api/image.js"
+import { getAlbumListReq } from "@/api/album.js";
 
 export default {
   name: "Upload",
@@ -76,22 +76,38 @@ export default {
       albumList: [],
     };
   },
-  created: function(){
-    this.getAlbumList()
+  created: function () {
+    this.getAlbumList();
   },
-  computed:{
+  computed: {
     uploadHeaders: function () {
-      let token = localStorage.getItem('accessToken');
-      return {'Authorization': 'Bearer ' + token}
-    }
+      let token = localStorage.getItem("accessToken");
+      return { Authorization: "Bearer " + token };
+    },
   },
   methods: {
-    beforeUploadHandler(file){
-      this.uploadData['name'] = file.name
-      this.uploadData['size'] = file.size
-      this.uploadData['lastModified'] = file.lastModified
-      this.uploadData['fileType'] = file.type
-      if (this.selectedAlbum) this.uploadData['albumId'] = this.selectedAlbum
+    beforeUploadHandler(file) {
+      this.uploadData["name"] = file.name;
+      this.uploadData["size"] = file.size;
+      this.uploadData["lastModified"] = file.lastModified;
+      this.uploadData["fileType"] = file.type;
+      if (this.selectedAlbum) this.uploadData["albumId"] = this.selectedAlbum;
+    },
+    onErrorHandler(err) {
+      switch (err.status) {
+        case 400:
+          this.$message.error("不支持的文件类型");
+          break;
+        case 401:
+          this.$router.push("/login");
+          break;
+        case 404:
+          this.$message.error("未检测到文件");
+          break;
+        case 500:
+          this.$message.error("上传失败，可能上传了相同图片");
+          break;
+      }
     },
     // uploadImg(params){
     //   let form = new FormData()
@@ -111,11 +127,11 @@ export default {
     startUpload() {
       this.$refs.upload.submit();
     },
-    async getAlbumList(){
-      let res = await getAlbumListReq()
-      this.albumList = res.data  
+    async getAlbumList() {
+      let res = await getAlbumListReq();
+      this.albumList = res.data;
     },
-  }
+  },
 };
 </script>
 
@@ -128,12 +144,12 @@ export default {
   justify-content: center;
   width: 100%;
 }
-.main-area{
+.main-area {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.to-album{
+.to-album {
   display: flex;
   align-items: center;
   width: 100%;

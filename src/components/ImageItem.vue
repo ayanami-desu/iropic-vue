@@ -10,7 +10,13 @@
       :src="getImage(imageData.id)"
       :alt="imageData.origin_filename"
       fit="cover"
-    />
+    >
+      <div
+        slot="placeholder"
+        class="cell-img"
+        v-loading="true"
+      />
+    </el-image>
     <i
       class="choose-icon el-icon-help"
       :class="imageData.selected ? 'el-icon-circle-check' : 'choose-icon-hover'"
