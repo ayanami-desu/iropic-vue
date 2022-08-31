@@ -30,6 +30,16 @@ const routes = [
     component: () => import('../views/Upload.vue')
   },
   {
+    path: '/sequence',
+    name: 'Sequence',
+    component: () => import('../views/Sequence.vue')
+  },
+  {
+    path: '/discovery',
+    name: 'Discovery',
+    component: () => import('../views/Discovery.vue')
+  },
+  {
     path: '/imageDetail/:pid',
     name: 'imageDetail',
     component: () => import('../views/Detail.vue')

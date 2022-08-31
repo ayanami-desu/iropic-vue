@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
@@ -43,6 +44,24 @@ const store = new Vuex.Store({
         icon: "el-icon-user",
         name: "登录",
       },
+    ],
+    orderMethods:[
+      {
+        name: '图片下载时间升序',
+        order: 'edit_time'
+      },
+      {
+        name: '图片下载时间降序',
+        order: '-edit_time'
+      },
+      {
+        name: '图片上传时间升序',
+        order: 'id'
+      },
+      {
+        name: '图片上传时间降序',
+        order: '-id'
+      },
     ]
   },
   mutations: {
@@ -52,7 +71,17 @@ const store = new Vuex.Store({
     expandSideNav(state, payload) {
       state.sideNavState = payload.newVal
     }
-  }
+  },
+  plugins: [
+    createPersistedState({ 
+      storage: window.sessionStorage,
+      reducer(val){
+        return {
+          pidList: val.pidList
+        }
+      }
+    })
+  ]
 })
 
 export default store;

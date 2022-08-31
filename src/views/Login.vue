@@ -49,7 +49,7 @@
         </el-button>
         <el-button
           type="primary"
-          @click.native.prevent="logout"
+          @click.native.prevent="clearToken"
         >
           清除token
         </el-button>
@@ -117,8 +117,8 @@ export default {
           }).catch((err) => {
             console.log(err)
             this.$message('token过期，请登录！')
+            this.clearToken()
           })
-
         });
     },
     login(form) {
@@ -157,6 +157,16 @@ export default {
       catch (err){
         console.log(err)
         this.$message('注销失败')
+      }
+    },
+    clearToken(){
+      try{
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+      }
+      catch (err){
+        console.log(err)
+        this.$message('清除token失败')
       }
     }
   },

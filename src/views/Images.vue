@@ -9,9 +9,6 @@
           <el-breadcrumb-item v-if="albumId">
             相册：{{ albumName }}
           </el-breadcrumb-item>
-          <el-breadcrumb-item v-if="tags">
-            标签
-          </el-breadcrumb-item>
         </el-breadcrumb>
         <div class="num-con">
           <span>{{ totalPicNum }}</span>
@@ -37,10 +34,21 @@
         </div>
         <div
           class="top-tool-item"
-          @click="changeSortBy"
         >
-          <i class="el-icon-sort" />
-          <span>{{ sortBy?'最新':'最早' }}</span>
+          <el-popover
+            placement="bottom-end"
+          >
+            <div
+              v-for="method in orderMethods"
+              :key="method.name"
+            >
+              <span
+                @click="changeOrder(method.order)"
+                class="order-item"
+              >{{ method.name }}</span>
+            </div>
+            <span slot="reference"><i class="el-icon-sort" />排序</span>
+          </el-popover>
         </div>
       </div>
     </div>
@@ -100,24 +108,29 @@ export default {
       albumId: this.$route.params.albumId,
       tags: this.$route.params.tags,
       pageSize: 16,
-      sortBy: true,//true代表降序，down代表升序
+      sequence: true,//true代表降序，down代表升序
+      orderBy: '-edit_time',
       pageLoading: true,
       imageList: [],
       albumName: '',
       totalPicNum: 0,
       selectedTags: this.$route.params.tags?this.$route.params.tags.split('+'):[],
       selectedImgList: [],
-      nowPage: this.$route.query.page?this.$route.query.page:1,
+      nowPage: this.$route.query.page?parseInt(this.$route.query.page):1,
     };
   },
-  computed: {},
+  computed: {
+    orderMethods() {
+      return this.$store.state.orderMethods;
+    },
+  },
   watch: {
     // 监听参数变化，重新获取数据
     $route(to) {
       this.albumId = to.params.albumId;
       this.tags = to.params.tags;
       this.selectedTags = to.params.tags?to.params.tags.split('+'):[];
-      let page = to.query.page?to.query.page:1;
+      let page = to.query.page?parseInt(to.query.page):1;
       this.nowPage = page;
       this.loadImages(page);
     },
@@ -154,9 +167,9 @@ export default {
       }
       this.selectedImgList = []     
     },
-    changeSortBy(){
-      this.sortBy = !this.sortBy
-      this.loadImages(1)
+    changeOrder(order){
+      this.orderBy = order;
+      this.loadImages(this.nowPage)
     },
     handlePageChange(nowPage){
       this.cancelSelect();
@@ -171,7 +184,7 @@ export default {
       let data = {
         page: nowPage,
         num: this.pageSize,
-        sortBy: this.sortBy?'down':'up'
+        orderBy: this.orderBy,
       };
       if (this.tags) {
         data["tags"] = this.tags.replaceAll("+", ",");
@@ -280,6 +293,10 @@ export default {
   color:#0073b2;
   font-weight: bold;
 
+}
+.order-item{
+  cursor: pointer;
+  text-align: center;
 }
 .main-con {
   display: flex;

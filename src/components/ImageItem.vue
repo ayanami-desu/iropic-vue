@@ -8,7 +8,7 @@
       lazy
       class="cell-img"
       :src="getImage(imageData.id)"
-      alt="加载错误"
+      :alt="imageData.origin_filename"
       fit="cover"
     />
     <i

@@ -1,13 +1,14 @@
 import Vue from 'vue'
-//import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 
 import {
   Pagination,
+  Popover,
   Dialog,
   Drawer,
   Input,
+  InputNumber,
   Select,
   Option,
   Button,
@@ -29,9 +30,11 @@ import {
 } from 'element-ui';
 
 Vue.use(Pagination);
+Vue.use(Popover);
 Vue.use(Dialog);
 Vue.use(Drawer)
 Vue.use(Input);
+Vue.use(InputNumber);
 Vue.use(Select);
 Vue.use(Option);
 Vue.use(Button);

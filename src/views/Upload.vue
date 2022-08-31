@@ -31,6 +31,7 @@
       :data="uploadData"
       :action="uploadUrl"
       multiple
+      accept="image/jpg, image/jpeg, image/png"
       :before-upload="beforeUploadHandler"
       :auto-upload="false"
       :headers="uploadHeaders"
@@ -46,9 +47,15 @@
     <div>
       <el-button
         type="text"
-        @click="gotoHome"
+        @click="$router.push('/')"
       >
         回首页
+      </el-button>
+      <el-button
+        type="text"
+        @click="$refs.upload.clearFiles()"
+      >
+        清空文件列表
       </el-button>
     </div>
   </div>
@@ -56,7 +63,7 @@
 
 <script>
 import { getAlbumListReq } from "@/api/album.js"
-import { uploadImgReq } from "@/api/image.js"
+//import { uploadImgReq } from "@/api/image.js"
 
 export default {
   name: "Upload",
@@ -79,32 +86,28 @@ export default {
     }
   },
   methods: {
-    gotoHome() {
-      this.$router.replace("/");
-    },
     beforeUploadHandler(file){
       this.uploadData['name'] = file.name
       this.uploadData['size'] = file.size
       this.uploadData['lastModified'] = file.lastModified
       this.uploadData['fileType'] = file.type
       if (this.selectedAlbum) this.uploadData['albumId'] = this.selectedAlbum
-
     },
-    uploadImg(params){
-      let form = new FormData()
-      let config = {
-         headers: {'Content-Type': 'multipart/form-data'}
-      }
-      form.append('file', params.file)
-      for(let key in params.data){
-        form.append(key,params.data[key])
-      }
-      uploadImgReq(form,config).then(() => {
+    // uploadImg(params){
+    //   let form = new FormData()
+    //   let config = {
+    //      headers: {'Content-Type': 'multipart/form-data'}
+    //   }
+    //   form.append('file', params.file)
+    //   for(let key in params.data){
+    //     form.append(key,params.data[key])
+    //   }
+    //   uploadImgReq(form,config).then(() => {
 
-      }).catch((err) => {
-        console.log(err)
-      })
-    },
+    //   }).catch((err) => {
+    //     console.log(err)
+    //   })
+    // },
     startUpload() {
       this.$refs.upload.submit();
     },

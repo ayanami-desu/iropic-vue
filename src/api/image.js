@@ -80,3 +80,12 @@ export const cancelImgR18Req = (data) => {
         data
     })
 }
+
+export const getImageSeqReq = (data) => {
+    //获取还没有打标签的图片
+    return axios({
+        url: 'image/seq',
+        method: 'get',
+        data
+    })
+}
