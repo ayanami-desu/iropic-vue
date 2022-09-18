@@ -4,7 +4,7 @@ import axios from "../http/request"
 export const getImgListReq = (data) => {
     // 获取图片列表
     return axios({
-        url: 'image/image',
+        url: 'image/images',
         method: 'post',
         data
     })
@@ -31,8 +31,8 @@ export const deleteImgReq = (data) => {
 export const setImgGroupReq = (data) => {
     // 将图片差分设为一组
     return axios({
-        url: 'image/image',
-        method: 'put',
+        url: 'image/group',
+        method: 'post',
         data
     })
 }

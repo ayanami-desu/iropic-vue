@@ -81,10 +81,10 @@ export default {
       }
     },
     editAlbum() {
-      this.albumData["albumId"] = this.temp["id"];
+      this.albumData["aid"] = this.temp["id"];
       editAlbumReq(this.albumData)
         .then((res) => {
-          this.$message(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((err) => {
           this.$message.error("出错了");
@@ -94,7 +94,7 @@ export default {
     createAlbum() {
       newAlbumReq(this.albumData)
         .then((res) => {
-          this.$message(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((err) => {
           this.$message.error("出错了");

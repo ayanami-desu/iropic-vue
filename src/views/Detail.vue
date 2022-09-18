@@ -13,7 +13,7 @@
       <div class="title-desc">
         <div>
           <span>下载于：</span>
-          <time>{{ stamp2Date(imageInfo.edit_time) }}</time>
+          <time>{{ stamp2Date(imageInfo.lastModified) }}</time>
         </div>
         <div>
           <span>大小：</span>
@@ -34,16 +34,18 @@
         class="the-image"
       />
     </div>
-    <div
-      class="img-con"
-      v-for="subPid in imageInfo.images_set"
-      :key="subPid"
-    >
-      <el-image
-        :src="image_url + subPid"
-        fit="scale-down"
-        class="the-image"
-      />
+    <div v-if="this.subImgList.length !== 0">
+      <div
+        class="img-con"
+        v-for="subPid in this.subImgList"
+        :key="subPid"
+      >
+        <el-image
+          :src="image_url + subPid"
+          fit="scale-down"
+          class="the-image"
+        />
+      </div>
     </div>
     <div>
       <el-button @click="seeOriginImg">
@@ -66,7 +68,7 @@
         {{ tag }}
       </el-tag>
     </div>
-    <div v-if="imageInfo.labels.length == 0">
+    <div v-if="imageInfo.label.length == 0">
       暂无标签
     </div>
     <div class="label-input">
@@ -105,7 +107,7 @@
   </div>
 </template>
 <script>
-import { setAlbumCoverReq } from "@/api/album.js";
+//import { setAlbumCoverReq } from "@/api/album.js";
 import { searchLabelReq } from "@/api/label.js";
 import { getImgInfoReq, putImgLabelReq, delImgLabelReq } from "@/api/image.js";
 import LabelCloud from "../components/LabelCloud.vue";
@@ -120,12 +122,13 @@ export default {
       image_url: this.MyEnv.image_url,
       pid: this.$route.params.pid,
       imageInfo: {
-        belong_album: "",
-        edit_time: "",
-        labels: [],
+        belongAlbum: "",
+        lastModified: "",
+        label: [],
       },
+      subImgList: [],
       pageLoading: true,
-      imageSize: 1.004,
+      imageSize: 1.00,
       remoteLabelList: [],
       selectedLables: [],
       searchLoading: false,
@@ -165,16 +168,20 @@ export default {
       })
         .then((res) => {
           this.imageInfo = res.data;
-          //this.imageSize = res.size / (1024 * 1024);
+          this.imageSize = res.data.size / (1024 * 1024);
+          if (res.data.subImg.length !==0 ){
+            this.subImgList = res.data.subImg.split(',')
+          }
           this.pageLoading = false;
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    async setAlbumCover(pid) {
-      let res = await setAlbumCoverReq(pid);
-      this.$message(res.msg);
+    async setAlbumCover() {
+      //let res = await setAlbumCoverReq(pid);
+      //this.$message(res.msg);
+      this.$message("暂不支持");
     },
     searchLabel(query) {
       let that = this;

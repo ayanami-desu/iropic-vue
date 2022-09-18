@@ -1,14 +1,14 @@
 <template>
   <div class="cell-item">
     <ImageNumBadge
-      :num="imageData.sub_img_num"
-      v-if="imageData.sub_img_num !=0"
+      :num="imageData.subImg"
+      v-if="imageData.subImg.length !== 0 "
     />
     <el-image
       lazy
       class="cell-img"
       :src="getImage(imageData.id)"
-      :alt="imageData.origin_filename"
+      :alt="imageData.filename"
       fit="cover"
     >
       <div
@@ -33,16 +33,16 @@
           图片详情
         </span>
         <div class="item-desc">
-          <i class="el-icon-date" />{{ stamp2Date(imageData.edit_time) }}
+          <i class="el-icon-date" />{{ stamp2Date(imageData.lastModified) }}
         </div>
       </div>
       <div>
         <i class="el-icon-folder-opened" />
         <span
           style="margin-left: 3px"
-          v-if="imageData.belong_album"
+          v-if="imageData.belongAlbum"
         >{{
-          imageData.belong_album
+          imageData.belongAlbum
         }}</span>
         <span
           style="margin-left: 3px"

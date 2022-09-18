@@ -11,7 +11,7 @@ const service = axios.create({
 //请求拦截
 service.interceptors.request.use(config => {
     //每次发送请求之前判断是否存在 token，如果存在，则统一在 http 请求的 header 都加上 token，不用每次请求都手动添加了
-    const token = window.localStorage.getItem('accessToken');
+    const token = window.localStorage.getItem('token');
     //非外部链接，才增加 token 到请求头
     if (!config.url.startsWith("http")) {
         token && (config.headers['Authorization'] = 'Bearer ' + token)

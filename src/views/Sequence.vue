@@ -9,7 +9,7 @@
           class="li-item"
           @click="$router.push('/imageDetail/' + image.id)"
         >
-          {{ image.origin_filename }}
+          {{ image.filename }}
         </li>
       </ul>
     </div>
@@ -30,7 +30,7 @@ export default {
     async getImageSeq() {
       let res = await getImageSeqReq();
       this.imageList = res.data;
-      this.imageNum = res.num;
+      this.imageNum = res.data.length;
       let pidList = [];
       for (let i = 0; i < res.data.length; i++) {
         pidList.push(res.data[i]['id'])

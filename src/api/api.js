@@ -3,7 +3,7 @@ import axios from "../http/request"
 
 export const getTokenReq = (data) => {
     return axios({
-        url: 'token/',
+        url: 'login',
         method: 'post',
         data
     })

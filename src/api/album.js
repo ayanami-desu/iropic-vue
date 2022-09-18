@@ -24,7 +24,7 @@ export const setAlbumCoverReq = (pid) => {
 export const getAlbumListReq = (data) => {
     // 获取相册列表
     return axios({
-        url: 'album/album',
+        url: 'album/albums',
         method: 'get',
         data
     })

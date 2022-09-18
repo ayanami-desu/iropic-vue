@@ -81,7 +81,7 @@ export default {
   },
   computed: {
     uploadHeaders: function () {
-      let token = localStorage.getItem("accessToken");
+      let token = localStorage.getItem("token");
       return { Authorization: "Bearer " + token };
     },
   },
@@ -91,14 +91,17 @@ export default {
       this.uploadData["size"] = file.size;
       this.uploadData["lastModified"] = file.lastModified;
       this.uploadData["fileType"] = file.type;
-      if (this.selectedAlbum) this.uploadData["albumId"] = this.selectedAlbum;
+      if (this.selectedAlbum) this.uploadData["aid"] = this.selectedAlbum;
     },
     onErrorHandler(err) {
       switch (err.status) {
         case 400:
+          this.$message.error("参数有误");
+          break;
+        case 402:
           this.$message.error("不支持的文件类型");
           break;
-        case 401:
+        case 403:
           this.$router.push("/login");
           break;
         case 404:

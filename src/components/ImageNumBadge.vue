@@ -1,7 +1,7 @@
 <template>
   <div class="con">
     <span><i class="el-icon-copy-document" /></span>
-    <span>{{ num + 1 }}</span>
+    <span>{{ aNum }}</span>
   </div>
 </template>
 
@@ -10,9 +10,14 @@ export default {
     name: 'ImageNumBadge',
     props:{
         num:{
-            type: Number,
-            default: 0
+            type: String,
+            default: ""
         }
+    },
+    computed:{
+      aNum() {
+        return this.num.split(',').length + 1
+      }
     }
 }
 </script>

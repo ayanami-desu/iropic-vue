@@ -109,7 +109,7 @@ export default {
       tags: this.$route.params.tags,
       pageSize: 16,
       sequence: true,//true代表降序，down代表升序
-      orderBy: '-edit_time',
+      orderBy: 'id desc',
       pageLoading: true,
       imageList: [],
       albumName: '',
@@ -184,23 +184,24 @@ export default {
       let data = {
         page: nowPage,
         num: this.pageSize,
-        orderBy: this.orderBy,
+        order: this.orderBy,
       };
       if (this.tags) {
         data["tags"] = this.tags.replaceAll("+", ",");
       }
       if (this.albumId) {
-        data["albumId"] = this.albumId;
+        data["aid"] = this.albumId;
       }
       let res = await getImgListReq(data);
-      if (res.data.length == 0) {
+      if (res.data.data === null) {
         this.$message("没有图片！");
+        this.pageLoading = false
         return;
       }
-      let temp = res.data;
+      let temp = res.data.data;
       let pidList = []
-      for (let i = 0; i < res.data.length; i++) {
-        pidList.push(res.data[i]['id'])
+      for (let i = 0; i < temp.length; i++) {
+        pidList.push(res.data.data[i]['id'])
         temp[i]["selected"] = false;
       }
       this.$store.commit({
@@ -208,17 +209,15 @@ export default {
         pidList: pidList
       })
       this.imageList = temp;
-      this.totalPicNum = res.imageNum;
-      if(this.albumId) this.albumName = temp[0]['belong_album']
+      this.totalPicNum = res.data.imageNum;
+      if(this.albumId) this.albumName = temp[0]['belongAlbum']
       this.pageLoading = false
-      if (nowPage === 1) {
-        this.$notify.success({
-          title: "Info",
-          message: "发现" + res.imageNum + "张图片",
-          position: "bottom-right",
-          duration: 2000,
-        });
-      }
+      this.$notify.success({
+        title: "Info",
+        message: "发现" + res.data.imageNum + "张图片",
+        position: "bottom-right",
+        duration: 2000,
+      });
     },
     addSelectedTag(tag) {
       if (

@@ -116,7 +116,7 @@ export default {
       })
         .then(() => {
           delAlbumReq({
-            albumId: albumId,
+            aid: albumId,
           }).then((res) => {
             this.$message({
               type: "success",

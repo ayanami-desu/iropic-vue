@@ -48,11 +48,11 @@ const store = new Vuex.Store({
     orderMethods:[
       {
         name: '图片下载时间升序',
-        order: 'edit_time'
+        order: 'last_modified'
       },
       {
         name: '图片下载时间降序',
-        order: '-edit_time'
+        order: 'last_modified desc'
       },
       {
         name: '图片上传时间升序',
@@ -60,7 +60,7 @@ const store = new Vuex.Store({
       },
       {
         name: '图片上传时间降序',
-        order: '-id'
+        order: 'id desc'
       },
     ]
   },

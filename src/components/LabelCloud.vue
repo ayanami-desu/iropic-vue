@@ -3,7 +3,7 @@
     <div class="all-tags-con">
       <div
         v-for="label in labelList"
-        :key="label.name"
+        :key="label.id"
         class="label-item"
         @click="addLabel(label.name)"
       >

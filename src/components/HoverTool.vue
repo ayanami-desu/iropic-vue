@@ -137,14 +137,14 @@ export default {
       this.expandTool = false;
     },
     deleteImgs() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+      this.$confirm("此操作将永久删除该图片, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
           deleteImgReq({
-            pidList: this.selectedImgList,
+            pidList: this.selectedImgList.join(','),
           }).then((res) => {
             this.$message({
               type: "success",
@@ -162,7 +162,7 @@ export default {
     },
     setImgR18() {
       setImgR18Req({
-        pidList: this.selectedImgList,
+        pidList: this.selectedImgList.join(','),
       }).then((res) => {
         this.$message(res.msg);
         this.cancelSelect();
@@ -170,7 +170,7 @@ export default {
     },
     cancelImgR18() {
       cancelImgR18Req({
-        pidList: this.selectedImgList,
+        pidList: this.selectedImgList.join(','),
       }).then((res) => {
         this.$message(res.msg);
         this.cancelSelect();
@@ -178,8 +178,8 @@ export default {
     },
     moveImgToAlbum(albumId) {
       moveImgToAlbumReq({
-        pidList: this.selectedImgList,
-        albumId: albumId,
+        pidList: this.selectedImgList.join(','),
+        aid: albumId,
       })
         .then((res) => {
           this.$message(res.msg);
@@ -201,7 +201,7 @@ export default {
         return
       }
       setImgGroupReq({
-        pidList: this.selectedImgList
+        pidList: this.selectedImgList.join(',')
       }).then((res) => {
         this.$message(res.msg)
         this.cancelSelect();

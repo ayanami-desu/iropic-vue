@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { getTokenReq, checkLoginReq, refreshTokenReq } from "@/api/api.js";
+import { getTokenReq, checkLoginReq } from "@/api/api.js";
 
 export default {
   name: "Login",
@@ -87,14 +87,14 @@ export default {
   },
   methods: {
     checkLogin() {
-      let accessToken = localStorage.getItem('accessToken')
+      let accessToken = localStorage.getItem('token')
       if ( !accessToken ) {
         this.$message('请登录！')
         return
       }
       checkLoginReq()
         .then((res) => {
-          if (res.code === 1) {
+          if (res.code === 200) {
             this.hasLogin = true;
             this.$message({
                 type: 'success',
@@ -103,22 +103,7 @@ export default {
           }
         })
         .catch(() => {
-          let refreshToken = localStorage.getItem("refreshToken");
-          refreshTokenReq({
-            refresh: refreshToken || "123",
-          }).then((res) => {
-              localStorage.setItem("accessToken", res.access);
-              localStorage.setItem("refreshToken", res.refresh);
-              this.$message({
-                type: 'success',
-                message: 'token刷新成功'
-              })
-              this.hasLogin = true;
-          }).catch((err) => {
-            console.log(err)
-            this.$message('token过期，请登录！')
-            this.clearToken()
-          })
+          this.$message('请登录！')
         });
     },
     login(form) {
@@ -126,8 +111,7 @@ export default {
         if (valid) {
           getTokenReq(this.form)
             .then((res) => {
-                localStorage.setItem("accessToken", res.access);
-                localStorage.setItem("refreshToken", res.refresh);
+                localStorage.setItem("token", res.data.token);
                 this.$message({
                   message: "登录成功啦",
                   type: "success",
@@ -149,8 +133,7 @@ export default {
     },
     logout(){
       try{
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
+        localStorage.removeItem('token')
         this.$message('注销成功')
         this.$router.replace('/')
       }
@@ -161,8 +144,7 @@ export default {
     },
     clearToken(){
       try{
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
+        localStorage.removeItem('token')
       }
       catch (err){
         console.log(err)

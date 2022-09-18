@@ -10,6 +10,7 @@ import {
   Input,
   InputNumber,
   Select,
+  Switch,
   Option,
   Button,
   Tooltip,
@@ -36,6 +37,7 @@ Vue.use(Drawer)
 Vue.use(Input);
 Vue.use(InputNumber);
 Vue.use(Select);
+Vue.use(Switch)
 Vue.use(Option);
 Vue.use(Button);
 Vue.use(Tooltip);
