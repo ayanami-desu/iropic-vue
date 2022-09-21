@@ -5,9 +5,9 @@
         v-for="label in labelList"
         :key="label.id"
         class="label-item"
-        @click="addLabel(label.name)"
+        @click="addLabel(label)"
       >
-        # <span :style="labelFontSize(label.images_num)">{{ label.name }}</span>
+        # <span :style="labelFontSize(label.imageNum)">{{ label.name }}</span>
       </div>
     </div>
     <div class="form-con">
@@ -19,7 +19,7 @@
         style="margin:1em 0;"
         @click="submitNewLabel"
       >
-        提交
+        新增标签
       </el-button>
     </div>
   </div>
@@ -49,7 +49,7 @@ export default {
     },
     async submitNewLabel(){
       let res = await newLabelReq({
-        labels: this.inputLabel
+        labelStr: this.inputLabel
       })
       this.getLabelList()
       this.$message(res.msg)

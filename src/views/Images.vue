@@ -32,12 +32,8 @@
           <i class="el-icon-view" />
           <span>随机一张</span>
         </div>
-        <div
-          class="top-tool-item"
-        >
-          <el-popover
-            placement="bottom-end"
-          >
+        <div class="top-tool-item">
+          <el-popover placement="bottom-end">
             <div
               v-for="method in orderMethods"
               :key="method.name"
@@ -114,9 +110,9 @@ export default {
       imageList: [],
       albumName: '',
       totalPicNum: 0,
-      selectedTags: this.$route.params.tags?this.$route.params.tags.split('+'):[],
+      selectedTags: this.$route.params.tags ? this.$route.params.tags.split('+') : [],
       selectedImgList: [],
-      nowPage: this.$route.query.page?parseInt(this.$route.query.page):1,
+      nowPage: this.$route.query.page ? parseInt(this.$route.query.page) : 1,
     };
   },
   computed: {
@@ -129,8 +125,8 @@ export default {
     $route(to) {
       this.albumId = to.params.albumId;
       this.tags = to.params.tags;
-      this.selectedTags = to.params.tags?to.params.tags.split('+'):[];
-      let page = to.query.page?parseInt(to.query.page):1;
+      this.selectedTags = to.params.tags ? to.params.tags.split('+') : [];
+      let page = to.query.page ? parseInt(to.query.page) : 1;
       this.nowPage = page;
       this.loadImages(page);
     },
@@ -139,7 +135,7 @@ export default {
     this.loadImages(this.nowPage);
   },
   methods: {
-    gotoRandomImg(){
+    gotoRandomImg() {
       getRandomImgReq({
         field: 'pid'
       }).then((res) => {
@@ -158,20 +154,20 @@ export default {
       let pid = this.imageList[index]['id']
       this.selectedImgList.splice(this.selectedImgList.indexOf(pid), 1);
     },
-    cancelSelect(){
+    cancelSelect() {
       //取消全部选择
-      for (let i=0;i<this.imageList.length;i++){
-        if(this.imageList[i]['selected']) {
+      for (let i = 0; i < this.imageList.length; i++) {
+        if (this.imageList[i]['selected']) {
           this.imageList[i]['selected'] = false
         }
       }
-      this.selectedImgList = []     
+      this.selectedImgList = []
     },
-    changeOrder(order){
+    changeOrder(order) {
       this.orderBy = order;
       this.loadImages(this.nowPage)
     },
-    handlePageChange(nowPage){
+    handlePageChange(nowPage) {
       this.cancelSelect();
       this.$router.push({
         path: this.$route.path,
@@ -210,14 +206,16 @@ export default {
       })
       this.imageList = temp;
       this.totalPicNum = res.data.imageNum;
-      if(this.albumId) this.albumName = temp[0]['belongAlbum']
+      if (this.albumId) this.albumName = temp[0]['belongAlbum']
       this.pageLoading = false
-      this.$notify.success({
-        title: "Info",
-        message: "发现" + res.data.imageNum + "张图片",
-        position: "bottom-right",
-        duration: 2000,
-      });
+      if (this.nowPage === 1) {
+        this.$notify.success({
+          title: "Info",
+          message: "发现" + res.data.imageNum + "张图片",
+          position: "bottom-right",
+          duration: 2000,
+        });
+      }
     },
     addSelectedTag(tag) {
       if (
@@ -233,17 +231,17 @@ export default {
       this.selectedTags.splice(this.selectedTags.indexOf(tag), 1);
       this.queryByTags()
     },
-    queryByTags(){
-      let path = this.albumId? '/album/' + this.albumId + '/': '/'
+    queryByTags() {
+      let path = this.albumId ? '/album/' + this.albumId + '/' : '/'
       if (this.selectedTags.length !== 0) {
         path = path + "tag/" + this.selectedTags.join("+");
-      }else{
+      } else {
         this.$router.push('/')
         return
       }
       this.$router.push({
         path: path,
-        query:{
+        query: {
           page: 1
         }
       });
@@ -259,6 +257,7 @@ export default {
   position: relative;
   width: 100%;
 }
+
 .breadcrumb-con {
   width: 100%;
   height: 30px;
@@ -269,10 +268,13 @@ export default {
   align-items: center;
   justify-content: space-between;
 }
-.breadcrumb{
+
+.breadcrumb {
   display: flex;
-  align-items: center;;
+  align-items: center;
+  ;
 }
+
 .num-con {
   background-color: #777;
   color: #fff;
@@ -280,23 +282,28 @@ export default {
   padding: 0 0.25em;
   text-align: center;
 }
-.top-tools-con{
+
+.top-tools-con {
   display: flex;
   padding-right: 1em;
 }
-.top-tool-item{
+
+.top-tool-item {
   margin-right: 0.75em;
   cursor: pointer;
 }
-.top-tool-item i{
-  color:#0073b2;
+
+.top-tool-item i {
+  color: #0073b2;
   font-weight: bold;
 
 }
-.order-item{
+
+.order-item {
   cursor: pointer;
   text-align: center;
 }
+
 .main-con {
   display: flex;
   flex-wrap: wrap;
@@ -304,14 +311,18 @@ export default {
   min-height: 100px;
   overflow-y: auto;
 }
+
 @media screen and (max-width: 600px) {
+
   /* 移动端 */
   .main-con {
     flex-direction: column;
     align-items: center;
   }
 }
+
 @media screen and (min-width: 601px) {
+
   /* 桌面端 */
   .main-con {
     justify-content: flex-start;

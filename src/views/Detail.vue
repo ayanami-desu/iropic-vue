@@ -55,42 +55,53 @@
         设为相册封面
       </el-button>
     </div>
+    <div class="tag-con">
+      <el-tag
+        v-for="tag in imageInfo.label"
+        :key="tag.id"
+        effect="dark"
+        closable
+        @close="rmImgLabel(tag.id)"
+        class="tag-item"
+      >
+        {{ tag.name }}
+      </el-tag>
+    </div>
+    <div v-if="imageInfo.label">
+      暂无标签
+    </div>
     <el-divider />
     <div class="tag-con">
       <el-tag
-        v-for="tag in imageInfo.labels"
-        :key="tag"
-        effect="dark"
+        v-for="tag in preAddTagList"
+        :key="tag.id"
         closable
-        @close="handleTagClose(tag)"
+        @close="rmPreAddTag(tag)"
         class="tag-item"
       >
-        {{ tag }}
+        {{ tag.name }}
       </el-tag>
-    </div>
-    <div v-if="imageInfo.label.length == 0">
-      暂无标签
     </div>
     <div class="label-input">
       <el-select
-        v-model="selectedLables"
-        value-key="selectedLables"
+        v-model="selectedLabelList"
         multiple
         filterable
         remote
         reserve-keyword
-        placeholder="请输入标签"
+        placeholder="请输入标签关键字"
         :remote-method="searchLabel"
         :loading="searchLoading"
       >
         <el-option
           v-for="item in remoteLabelList"
-          :key="item.name"
-          :value="item.name"
+          :key="item.id"
+          :value="item.id"
+          :label="item.name"
         >
           <span style="float: left">{{ item.name }}</span>
           <span style="float: right; color: #8492a6; font-size: 13px">{{
-            item.images_num
+            item.imageNum
           }}</span>
         </el-option>
       </el-select>
@@ -130,8 +141,9 @@ export default {
       pageLoading: true,
       imageSize: 1.00,
       remoteLabelList: [],
-      selectedLables: [],
+      selectedLabelList: [],
       searchLoading: false,
+      preAddTagList: []
     };
   },
   watch: {
@@ -159,7 +171,7 @@ export default {
       return this.MyEnv.image_url + fid;
     },
     seeOriginImg() {
-      let url = this.image_url + this.pid + "&fileType=origin";
+      let url = this.image_url + this.pid + "&t=origin";
       window.open(url, "_blank");
     },
     getImgInfo(pid) {
@@ -171,6 +183,8 @@ export default {
           this.imageSize = res.data.size / (1024 * 1024);
           if (res.data.subImg.length !==0 ){
             this.subImgList = res.data.subImg.split(',')
+          }else{
+            this.subImgList = []
           }
           this.pageLoading = false;
         })
@@ -198,10 +212,15 @@ export default {
       }
     },
     putImgLabel() {
-      if (this.selectedLables.length == 0) return;
-      let labelString = this.selectedLables.join(",");
+      if (this.selectedLabelList.length == 0 && this.preAddTagList.length == 0) return;
+      let tmp = []
+      for (let i=0;i<this.preAddTagList.length;i++){
+        tmp.push(this.preAddTagList[i]["id"])
+      }
+      tmp.concat(this.selectedLabelList, )
+      let labelString = tmp.join(",");
       putImgLabelReq({
-        labels: labelString,
+        lidList: labelString,
         pid: this.pid,
       }).then((res) => {
         this.$message({
@@ -209,11 +228,11 @@ export default {
           message: res.msg,
         });
         this.getImgInfo(this.pid);
-        this.selectedLables = [];
+        this.selectedLabelList = [];
+        this.preAddTagList = []
       });
     },
-    handleTagClose(tag) {
-      console.log(tag);
+    rmImgLabel(lid) {
       this.$confirm("此操作将移除此标签, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -222,7 +241,7 @@ export default {
         .then(() => {
           delImgLabelReq({
             pid: this.pid,
-            label: tag,
+            lid: lid,
           }).then(() => {
             this.getImgInfo(this.pid);
           });
@@ -238,22 +257,25 @@ export default {
           });
         });
     },
-    handleAddLabel(label) {
-      if (this.selectedLables.indexOf(label) >= 0) {
+    handleAddLabel(tag) {
+      if (this.preAddTagList.indexOf(tag) > -1 || this.selectedLabelList.indexOf(tag.id) > -1) {
         this.$message({
           type: "error",
           message: "标签重复啦",
         });
         return;
       }
-      if (this.selectedLables.length >= 5) {
+      if (this.preAddTagList.length + this.selectedLabelList.length >= 5) {
         this.$message({
           type: "error",
           message: "标签太多啦",
         });
         return;
       }
-      this.selectedLables.push(label);
+      this.preAddTagList.push(tag);
+    },
+    rmPreAddTag(tag){
+      this.preAddTagList.splice(this.preAddTagList.indexOf(tag), 1)
     },
     prevOrNext(direction) {
       let pidList = this.$store.state.pidList;

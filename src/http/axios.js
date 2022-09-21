@@ -33,7 +33,7 @@ service.interceptors.response.use(response => {
     }
     return response.data;
 },error => {
-    if (error.response.status === 401){
+    if (error.response.status === 401 || error.response.status === 403){
         router.push('/login')
     }
     return Promise.reject(error)

@@ -1,13 +1,13 @@
 // ./api/request.js
 import axios from "../http/request"
 
-export const searchLabelReq = (keyword) => {
+export const searchLabelReq = (key) => {
     // 从开头按关键词匹配标签
     return axios({
-        url: 'label/label',
+        url: 'label/query',
         method: 'get',
         data: {
-            keyword: keyword
+            key: key
         }
     })
 }
@@ -15,7 +15,7 @@ export const searchLabelReq = (keyword) => {
 export const getLabelListReq = () => {
     // 获取全部标签
     return axios({
-        url: 'label/label',
+        url: 'label/labels',
         method: 'get',
     })
 }

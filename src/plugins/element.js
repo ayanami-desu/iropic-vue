@@ -30,6 +30,7 @@ import {
   Notification
 } from 'element-ui';
 
+Vue.prototype.$ELEMENT = { zIndex: 30 };
 Vue.use(Pagination);
 Vue.use(Popover);
 Vue.use(Dialog);

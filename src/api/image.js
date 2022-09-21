@@ -49,15 +49,15 @@ export const getImgInfoReq = (data) => {
 export const putImgLabelReq = (data) => {
     //为图片增加标签
     return axios({
-        url: 'image/info',
-        method: 'put',
+        url: 'image/label',
+        method: 'post',
         data
     })
 }
 export const delImgLabelReq = (data) => {
     //为图片删除标签
     return axios({
-        url: 'image/info',
+        url: 'image/label',
         method: 'delete',
         data
     })

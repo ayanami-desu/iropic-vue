@@ -43,15 +43,15 @@
       <div class="butt">
         <el-button
           type="primary"
-          @click.native.prevent="login('form')"
+          @click="login('form')"
         >
           登录
         </el-button>
         <el-button
           type="primary"
-          @click.native.prevent="clearToken"
+          @click="clearToken"
         >
-          清除token
+          访客登录
         </el-button>
       </div>
     </div>
@@ -145,6 +145,8 @@ export default {
     clearToken(){
       try{
         localStorage.removeItem('token')
+        this.$message.success('欢迎')
+        this.$router.replace('/')
       }
       catch (err){
         console.log(err)

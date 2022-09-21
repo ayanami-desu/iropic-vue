@@ -28,12 +28,6 @@ export default {
     };
   },
   methods: {
-    openAlbumDrawer() {
-      this.$refs.albumDrawer.drawer = true;
-    },
-    openLabelDrawer() {
-      this.$refs.labelDrawer.drawer = true;
-    },
     expandNav() {
       //移动端处理
       if (this.isMobile()) {
@@ -70,7 +64,7 @@ export default {
   height: 60px;
   box-sizing: border-box;
   background: #0073b2;
-  z-index: 999;
+  z-index: 9999;
   display: flex;
   justify-content: flex-start;
   align-items: center;

@@ -15,14 +15,14 @@
     <div class="labels-con">
       <div
         v-for="label in labelList"
-        :key="label.name"
+        :key="label.id"
         class="label-item"
       >
-        <el-badge :value="label.images_num">
+        <el-badge :value="label.imageNum">
           <el-tag
             @click="gotoTheLabel(label.name)"
             closable
-            @close="handleRemoveLabel(label.name)"
+            @close="handleRemoveLabel(label.id)"
           >
             # {{ label.name }}
           </el-tag>
@@ -53,13 +53,13 @@ export default {
     },
     async submitNewLabel() {
       let res = await newLabelReq({
-        labels: this.inputLabel,
+        labelStr: this.inputLabel,
       });
       this.getLabelList();
       this.$message(res.msg);
       this.inputLabel = "";
     },
-    handleRemoveLabel(name) {
+    handleRemoveLabel(lid) {
       this.$confirm("此操作将永久删除该标签, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -67,7 +67,7 @@ export default {
       })
         .then(() => {
           delLabelReq({
-            name: name,
+            lid: lid
           })
             .then((res) => {
               this.$message({

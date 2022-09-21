@@ -82,7 +82,7 @@ export default {
   computed: {
     uploadHeaders: function () {
       let token = localStorage.getItem("token");
-      return { Authorization: "Bearer " + token };
+      return token?{ Authorization: "Bearer " + token }:{};
     },
   },
   methods: {
@@ -98,6 +98,9 @@ export default {
         case 400:
           this.$message.error("参数有误");
           break;
+        case 401:
+        this.$router.push("/login");
+          break;
         case 402:
           this.$message.error("不支持的文件类型");
           break;
@@ -108,7 +111,7 @@ export default {
           this.$message.error("未检测到文件");
           break;
         case 500:
-          this.$message.error("上传失败，可能上传了相同图片");
+          this.$message.error("上传失败");
           break;
       }
     },
@@ -147,11 +150,13 @@ export default {
   justify-content: center;
   width: 100%;
 }
+
 .main-area {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .to-album {
   display: flex;
   align-items: center;

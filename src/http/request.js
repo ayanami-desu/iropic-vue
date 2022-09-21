@@ -1,5 +1,6 @@
 // ./api/axios.js
 import service from "./axios"
+import qs from 'qs'
 
 /**
  * @param {String} method  请求的方法：get、post、delete、put
@@ -18,11 +19,11 @@ const axios = ({
     if (method === 'get') {
         return service.get(url, {params: data, ...config});
     } else if (method === 'post') {
-        return service.post(url, data, {...config})
+        return service.post(url, qs.stringify(data), {...config})
     } else if (method === 'put') {
-        return service.put(url, data, {...config})
+        return service.put(url, qs.stringify(data), {...config})
     } else if (method === 'delete') {
-        return service.delete(url, {data: data, ...config});
+        return service.delete(url, {params: data, ...config});
     } else {
         console.error('未知的 method:' + method)
         return Promise.reject('不支持的 Method');
