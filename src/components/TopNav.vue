@@ -64,7 +64,7 @@ export default {
   height: 60px;
   box-sizing: border-box;
   background: #0073b2;
-  z-index: 9999;
+  z-index: 999;
   display: flex;
   justify-content: flex-start;
   align-items: center;

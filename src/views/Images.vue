@@ -16,22 +16,22 @@
       </div>
       <div>
         <el-tag
-          v-for="tag in selectedTags"
-          :key="tag"
+          v-for="tag in selectedTagList"
+          :key="tag.id"
           closable
-          @close="cancelSelectedTag(tag)"
+          @close="rmSelectedTag(tag)"
         >
-          {{ tag }}
+          {{ tag.name }}
         </el-tag>
       </div>
       <div class="top-tools-con">
-        <div
+        <!-- <div
           class="top-tool-item"
           @click="gotoRandomImg"
         >
           <i class="el-icon-view" />
           <span>随机一张</span>
-        </div>
+        </div> -->
         <div class="top-tool-item">
           <el-popover placement="bottom-end">
             <div
@@ -39,11 +39,11 @@
               :key="method.name"
             >
               <span
-                @click="changeOrder(method.order)"
+                @click="changeOrder(method)"
                 class="order-item"
               >{{ method.name }}</span>
             </div>
-            <span slot="reference"><i class="el-icon-sort" />排序</span>
+            <span slot="reference"><i class="el-icon-sort" />{{ this.orderBy.name }}</span>
           </el-popover>
         </div>
       </div>
@@ -65,7 +65,7 @@
         ref="imageItem"
         @select="selectImg"
         @cancel="cancelSelectImg"
-        @addTag="addSelectedTag"
+        @refresh="loadImages(1)"
       />
     </main>
     <el-pagination
@@ -104,13 +104,10 @@ export default {
       albumId: this.$route.params.albumId,
       tags: this.$route.params.tags,
       pageSize: 16,
-      sequence: true,//true代表降序，down代表升序
-      orderBy: 'id desc',
       pageLoading: true,
       imageList: [],
       albumName: '',
       totalPicNum: 0,
-      selectedTags: this.$route.params.tags ? this.$route.params.tags.split('+') : [],
       selectedImgList: [],
       nowPage: this.$route.query.page ? parseInt(this.$route.query.page) : 1,
     };
@@ -119,19 +116,24 @@ export default {
     orderMethods() {
       return this.$store.state.orderMethods;
     },
+    orderBy() {
+      return this.$store.state.orderBy
+    },
+    selectedTagList() {
+      return this.$store.state.selectedTagList
+    }
   },
   watch: {
     // 监听参数变化，重新获取数据
     $route(to) {
       this.albumId = to.params.albumId;
-      this.tags = to.params.tags;
-      this.selectedTags = to.params.tags ? to.params.tags.split('+') : [];
       let page = to.query.page ? parseInt(to.query.page) : 1;
       this.nowPage = page;
       this.loadImages(page);
     },
   },
   created: function () {
+    localStorage.setItem('orderBy', 'id desc')
     this.loadImages(this.nowPage);
   },
   methods: {
@@ -164,7 +166,10 @@ export default {
       this.selectedImgList = []
     },
     changeOrder(order) {
-      this.orderBy = order;
+      this.$store.commit({
+        type: 'changeOrderBy',
+        orderBy: order
+      })
       this.loadImages(this.nowPage)
     },
     handlePageChange(nowPage) {
@@ -180,17 +185,21 @@ export default {
       let data = {
         page: nowPage,
         num: this.pageSize,
-        order: this.orderBy,
+        order: this.orderBy.order,
       };
-      if (this.tags) {
-        data["tags"] = this.tags.replaceAll("+", ",");
+      if (this.selectedTagList.length !==0 ) {
+        let tmp = []
+        for (let i = 0; i < this.selectedTagList.length; i++) {
+          tmp.push(this.selectedTagList[i]["id"])
+        }
+        data["tags"] = tmp.join(',');
       }
       if (this.albumId) {
         data["aid"] = this.albumId;
       }
       let res = await getImgListReq(data);
-      if (res.data.data === null) {
-        this.$message("没有图片！");
+      if (res.data.imageNum === 0) {
+        this.$message.success("没有图片！");
         this.pageLoading = false
         return;
       }
@@ -217,35 +226,13 @@ export default {
         });
       }
     },
-    addSelectedTag(tag) {
-      if (
-        this.selectedTags.indexOf(tag) >= 0 ||
-        this.selectedTags.length >= 3
-      ) {
-        return;
-      }
-      this.selectedTags.push(tag);
-      this.queryByTags()
+    rmSelectedTag(tag) {
+      this.$store.commit({
+        type: 'rmSelectedTag',
+        tag: tag
+      })
+      this.loadImages(1)
     },
-    cancelSelectedTag(tag) {
-      this.selectedTags.splice(this.selectedTags.indexOf(tag), 1);
-      this.queryByTags()
-    },
-    queryByTags() {
-      let path = this.albumId ? '/album/' + this.albumId + '/' : '/'
-      if (this.selectedTags.length !== 0) {
-        path = path + "tag/" + this.selectedTags.join("+");
-      } else {
-        this.$router.push('/')
-        return
-      }
-      this.$router.push({
-        path: path,
-        query: {
-          page: 1
-        }
-      });
-    }
   },
 };
 </script>

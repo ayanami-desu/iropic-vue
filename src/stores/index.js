@@ -7,7 +7,12 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     pidList: [],
+    selectedTagList: [],
     sideNavState: true,
+    orderBy: {
+      name: '上传时间降序',
+      order: 'id desc'
+    },
     navList: [
       {
         routerTo: "/",
@@ -47,19 +52,19 @@ const store = new Vuex.Store({
     ],
     orderMethods:[
       {
-        name: '图片下载时间升序',
+        name: '下载时间升序',
         order: 'last_modified'
       },
       {
-        name: '图片下载时间降序',
+        name: '下载时间降序',
         order: 'last_modified desc'
       },
       {
-        name: '图片上传时间升序',
+        name: '上传时间升序',
         order: 'id'
       },
       {
-        name: '图片上传时间降序',
+        name: '上传时间降序',
         order: 'id desc'
       },
     ]
@@ -70,6 +75,15 @@ const store = new Vuex.Store({
     },
     expandSideNav(state, payload) {
       state.sideNavState = payload.newVal
+    },
+    addSelectedTag(state, payload){
+      state.selectedTagList.push(payload.tag)
+    },
+    rmSelectedTag(state, payload){
+      state.selectedTagList.splice(state.selectedTagList.indexOf(payload.tag), 1)
+    },
+    changeOrderBy(state, payload){
+      state.orderBy = payload.orderBy
     }
   },
   plugins: [
@@ -77,7 +91,9 @@ const store = new Vuex.Store({
       storage: window.sessionStorage,
       reducer(val){
         return {
-          pidList: val.pidList
+          pidList: val.pidList,
+          orderBy: val.orderBy,
+          selectedTagList: val.selectedTagList,
         }
       }
     })

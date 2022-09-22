@@ -20,7 +20,7 @@
       >
         <el-badge :value="label.imageNum">
           <el-tag
-            @click="gotoTheLabel(label.name)"
+            @click="gotoTheLabel(label)"
             closable
             @close="handleRemoveLabel(label.id)"
           >
@@ -44,8 +44,12 @@ export default {
     };
   },
   methods: {
-    gotoTheLabel(name) {
-      this.$router.push("/tag/" + name);
+    gotoTheLabel(tag) {
+      this.$store.commit({
+        type: 'addSelectedTag',
+        tag: tag 
+      })
+      this.$router.push('/')
     },
     async getLabelList() {
       let res = await getLabelListReq();

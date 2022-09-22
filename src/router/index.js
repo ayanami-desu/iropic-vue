@@ -16,14 +16,6 @@ const routes = [
     path: '/album/:albumId',
     component: Images,
   },
-  { 
-    path: '/tag/:tags',
-    component: Images, 
-  },
-  { 
-    path: '/album/:albumId/tag/:tags',
-    component: Images, 
-  },
   {
     path: '/upload',
     name: 'Upload',

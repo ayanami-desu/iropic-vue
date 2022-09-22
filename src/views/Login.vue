@@ -119,15 +119,13 @@ export default {
                 });
                 this.$router.replace('/')
             })
-            .catch(() => {
+            .catch((err) => {
+              console.log(err)
               this.$message({
-                message: "账户名或密码错误",
-                type: "error",
-                showClose: true,
+                message:"账户名或密码错误",
+                type: 'error'
               });
             });
-        } else {
-          return false;
         }
       });
     },

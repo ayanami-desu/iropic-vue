@@ -55,12 +55,12 @@
           v-if="imageData.isR18"
         ># R18</span>
         <span
-          v-for="tag in imageData.labels"
-          :key="tag"
+          v-for="tag in imageData.label"
+          :key="tag.id"
           class="my-button"
           @click="addSelectedTag(tag)"
         >
-          # {{ tag }}
+          # {{ tag.name }}
         </span>
       </div>
     </div>
@@ -91,6 +91,11 @@ export default {
       default: -1,
     },
   },
+  computed: {
+    selectedTagList() {
+      return this.$store.state.selectedTagList
+    }
+  },
   methods: {
     gotoPicDetail(data) {
       this.$router.push({
@@ -118,7 +123,17 @@ export default {
       }
     },
     addSelectedTag(tag) {
-      this.$emit("addTag", tag);
+      if (
+        this.selectedTagList.indexOf(tag) >= 0 ||
+        this.selectedTagList.length >= 3
+      ) {
+        return;
+      }
+      this.$store.commit({
+        type: 'addSelectedTag',
+        tag: tag 
+      })
+      this.$emit('refresh')
     },
   },
 };

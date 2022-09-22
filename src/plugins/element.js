@@ -30,7 +30,6 @@ import {
   Notification
 } from 'element-ui';
 
-Vue.prototype.$ELEMENT = { zIndex: 30 };
 Vue.use(Pagination);
 Vue.use(Popover);
 Vue.use(Dialog);
@@ -58,3 +57,4 @@ Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
 Vue.component(CollapseTransition.name, CollapseTransition)
+//Vue.prototype.$ELEMENT = { zIndex: 30 };
