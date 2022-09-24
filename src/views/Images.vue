@@ -25,27 +25,23 @@
         </el-tag>
       </div>
       <div class="top-tools-con">
-        <!-- <div
-          class="top-tool-item"
-          @click="gotoRandomImg"
+        <el-dropdown
+          trigger="click"
+          @command="changeOrder"
         >
-          <i class="el-icon-view" />
-          <span>随机一张</span>
-        </div> -->
-        <div class="top-tool-item">
-          <el-popover placement="bottom-end">
-            <div
+          <span class="el-dropdown-link">
+            {{ this.orderBy.name }}<i class="el-icon-arrow-down el-icon--right" />
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item
               v-for="method in orderMethods"
               :key="method.name"
+              :command="method"
             >
-              <span
-                @click="changeOrder(method)"
-                class="order-item"
-              >{{ method.name }}</span>
-            </div>
-            <span slot="reference"><i class="el-icon-sort" />{{ this.orderBy.name }}</span>
-          </el-popover>
-        </div>
+              {{ method.name }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
     </div>
     <HoverTool
@@ -79,7 +75,7 @@
   </div>
 </template>
 <script>
-import { getImgListReq, getRandomImgReq } from "@/api/image.js";
+import { getImgListReq } from "@/api/image.js";
 import HoverTool from "../components/HoverTool.vue";
 import ImageItem from "../components/ImageItem.vue";
 import "viewerjs/dist/viewer.css";
@@ -137,15 +133,6 @@ export default {
     this.loadImages(this.nowPage);
   },
   methods: {
-    gotoRandomImg() {
-      getRandomImgReq({
-        field: 'pid'
-      }).then((res) => {
-        this.$router.push('/imageDetail/' + res.pid)
-      }).catch((err) => {
-        console.log(err)
-      })
-    },
     selectImg(index) {
       this.imageList[index]['selected'] = true
       this.selectedImgList.push(this.imageList[index]['id']);
@@ -274,23 +261,10 @@ export default {
   display: flex;
   padding-right: 1em;
 }
-
-.top-tool-item {
-  margin-right: 0.75em;
+.el-dropdown-link{
   cursor: pointer;
+    color: #409EFF;
 }
-
-.top-tool-item i {
-  color: #0073b2;
-  font-weight: bold;
-
-}
-
-.order-item {
-  cursor: pointer;
-  text-align: center;
-}
-
 .main-con {
   display: flex;
   flex-wrap: wrap;

@@ -217,10 +217,10 @@ export default {
       for (let i=0;i<this.preAddTagList.length;i++){
         tmp.push(this.preAddTagList[i]["id"])
       }
-      tmp.concat(this.selectedLabelList, )
-      let labelString = tmp.join(",");
+      tmp = tmp.concat(this.selectedLabelList)
+      let lidStr = tmp.join(",");
       putImgLabelReq({
-        lidList: labelString,
+        lidList: lidStr,
         pid: this.pid,
       }).then((res) => {
         this.$message({

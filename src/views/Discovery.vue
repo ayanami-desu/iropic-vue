@@ -24,16 +24,19 @@ export default {
   data() {
     return {
       pidList: [],
-      imageNum: 8,
+      imageNum: 4,
     };
   },
   methods: {
     async getPidList() {
       let res = await getRandomImgReq({
-        field: "pidList",
         num: this.imageNum,
       });
-      this.pidList = res.pidList;
+      if (res.data === null){
+        this.$message.error(res.msg)
+        return
+      }
+      this.pidList = res.data;
     },
     getImage(pid) {
       return this.MyEnv.image_url + pid;

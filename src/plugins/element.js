@@ -4,9 +4,11 @@ import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 
 import {
   Pagination,
-  Popover,
   Dialog,
   Drawer,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
   Input,
   InputNumber,
   Select,
@@ -27,13 +29,15 @@ import {
   Loading,
   MessageBox,
   Message,
-  Notification
+  Notification,
 } from 'element-ui';
 
 Vue.use(Pagination);
-Vue.use(Popover);
 Vue.use(Dialog);
 Vue.use(Drawer)
+Vue.use(Dropdown)
+Vue.use(DropdownItem)
+Vue.use(DropdownMenu)
 Vue.use(Input);
 Vue.use(InputNumber);
 Vue.use(Select);
@@ -57,4 +61,3 @@ Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
 Vue.component(CollapseTransition.name, CollapseTransition)
-//Vue.prototype.$ELEMENT = { zIndex: 30 };
