@@ -10,6 +10,7 @@
       :src="getImage(imageData.id)"
       :alt="imageData.filename"
       fit="cover"
+      :z-index="96"
     >
       <div
         slot="placeholder"
